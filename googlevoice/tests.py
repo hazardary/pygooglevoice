@@ -1,4 +1,5 @@
-from googlevoice import Voice, util
+from googlevoice.voice import Voice
+import googlevoice.util as util
 from os import path, remove
 from unittest import TestCase, main
 

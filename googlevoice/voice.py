@@ -1,6 +1,7 @@
-from conf import config
-from util import *
-import settings
+from googlevoice.conf import config
+from googlevoice.util import *
+import googlevoice.settings as settings
+import os
 import base64
 
 qpat = re.compile(r'\?')
@@ -72,7 +73,7 @@ class Voice(object):
 
         content = self.__do_page('login').read()
         # holy hackjob
-        gxf = re.search(r"type=\"hidden\"\s+name=\"gxf\"\s+value=\"(.+)\"", content).group(1)
+        gxf = re.search(b"type=\"hidden\"\s+name=\"gxf\"\s+value=\"(.+)\"", content).group(1)
         result = self.__do_page('login_post', {'Email': email, 'Passwd': passwd, 'gxf': gxf})
 
         if result.geturl().startswith(getattr(settings, "SMSAUTH")):
@@ -266,6 +267,8 @@ class Voice(object):
             return urlopen(Request(getattr(settings, page) + data, None, headers))
         if data:
             headers.update({'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'})
+        if isinstance(data, str):
+            data = data.encode("ascii")
         pageuri = getattr(settings, page)
         if len(terms) > 0:
             m = qpat.match(page)

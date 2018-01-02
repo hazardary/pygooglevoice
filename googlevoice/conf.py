@@ -1,6 +1,10 @@
-from ConfigParser import ConfigParser, NoOptionError
 import os
-import settings
+try:
+    from ConfigParser import ConfigParser, NoOptionError
+except ImportError:
+    from configparser import ConfigParser, NoOptionError
+
+import googlevoice.settings
 
 
 class Config(ConfigParser):
